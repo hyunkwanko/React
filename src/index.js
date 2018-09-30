@@ -4,5 +4,5 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import './index.css';
 
-const rootElement = document.getElementById('root');
-ReactDOM.render(<App/>, rootElement);
+ReactDOM.render(<App/>, document.getElementById('root'));
+registerServiceWorker();
