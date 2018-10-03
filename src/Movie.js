@@ -5,13 +5,17 @@ import './Movie.css';
 class Movie extends Component {
     static propTypes = {
         title: PropTypes.string.isRequired,
-        poster: PropTypes.string.isRequired
+        poster: PropTypes.string.isRequired,
+        genres: PropTypes.array.isRequired,
+        synopsis: PropTypes.string.isRequired
     }
     render() {
         return (
-            <div>
+            <div className="Movie">
                 <MoviePoster poster={this.props.poster}/>
                 <h1>{this.props.title}</h1>
+                <h1>{this.props.genres}</h1>
+                <h1>{this.props.synopsis}</h1>
             </div>
         );
     }
@@ -20,7 +24,7 @@ class Movie extends Component {
 class MoviePoster extends Component{
 
     static propTypes = {
-        poster: PropTypes.string.isRequired
+        poster: PropTypes.string.isRequired,
     }
 
     render(){

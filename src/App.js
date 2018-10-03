@@ -7,52 +7,44 @@ class App extends Component {
   // Render: componentWillMount() -> render() -> componentDidMount()
   // Update: componentWillReceiveProps() -> shouldComponentUpdate() -> componentWillUpdate() -> render() -> componentDidUpdate()
   
-  state = {
-    greeting: 'Hello!',
-    movies: [
-      {
-        title: "Hunger",
-        poster: "https://images-na.ssl-images-amazon.com/images/I/61Mo1-oLQxL._SY445_.jpg"
-      },
-    
-      {
-        title: "Game",
-        poster: "https://upload.wikimedia.org/wikipedia/en/thumb/3/39/The_Hunger_Games_cover.jpg/220px-The_Hunger_Games_cover.jpg"
-      },
-    
-      {
-        title: "Moking",
-        poster: "https://m.media-amazon.com/images/M/MV5BMjA4NDg3NzYxMF5BMl5BanBnXkFtZTcwNTgyNzkyNw@@._V1_.jpg"
-      },
-    
-      {
-        title: "Jay",
-        poster: "https://steamcdn-a.akamaihd.net/steam/apps/416560/header.jpg?t=1504213621"
-      }
-    ]
-  }
+  state = {}
 
   componentDidMount(){
-    setTimeout(() => {
-      this.setState({
-        movies: [
-          ...this.state.movies,  // before movies
-          {
-            title: "newHunger",
-            poster: "https://steamcdn-a.akamaihd.net/steam/apps/416560/header.jpg?t=1504213621"
-          }
-        ]
-      })
-    }, 2000)
+    this._getMovies();
   }
 
+  _renderMovies = () => {
+    const movies = this.state.movies.map(movie => {
+      // console.log(movie);
+      return <Movie 
+        title={movie.title}
+        poster={movie.medium_cover_image}
+        key={movie.id}
+        genres={movie.genres}
+        synopsis={movie.synopsis}
+      />
+    })
+    return movies;
+  }
+
+  _getMovies = async () => {
+    const movies = await this._callApi()
+    this.setState({
+      movies
+    })
+  }
+
+  _callApi = () => {
+    return fetch('https://yts.am/api/v2/list_movies.json?sort_by=rating')
+    .then(response => response.json())
+    .then(json => json.data.movies)
+    .catch(err => console.log(err))
+  }
 
   render() {
     return (
       <div className="App">
-          {this.state.movies.map((movie, index) => {
-            return <Movie title={movie.title} poster={movie.poster} key={index}/>
-          })}
+          {this.state.movies ? this._renderMovies() : 'Loading'}
       </div>
     );
   }
